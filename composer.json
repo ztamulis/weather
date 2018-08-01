@@ -1,0 +1,14 @@
+{
+    "name": "bene/weather",
+    "require": {
+
+	},
+
+
+	"autoload": {
+		"psr-4": {
+			"App\\": "app/",
+			"Bene\\Weather\\": "src/"
+		}
+	}
+}
