@@ -50,12 +50,24 @@ class CheckWeather extends Command
         $lastWind = Weather::orderBy('created_at', 'DESC')->first();
         if ($lastWind['is_more_than_10'] == '0' && $res['wind']['speed'] > 10) {
             DB::table('weathers')->insert(['is_more_than_10' => '1', 'created_at' => date('Y/m/d H:i:s')]);
+            $this->sendEmail('Greiti perkope 10m/s');
         } else if ($lastWind['is_more_than_10'] == '1' && $res['wind']['speed'] < 10) {
             DB::table('weathers')->insert(['is_more_than_10' => '0', 'created_at' => date('Y/m/d H:i:s')]);
+			$this->sendEmail('Greiti yra mazesnis nei 10m/s');
         }
 
     }
 
-
+    public function sendEmail($text)
+    {
+        $emails = UserEmail::all()->pluck('email');
+        foreach ($emails as $email) {
+            Mail::raw($text, function ($message) use ($email) {
+                $message->subject('Vejo greitis');
+                $message->from('zygintas.tamulis@gmail.com', 'Website Name');
+                $message->to($email);
+            });
+        }
+    }
 
 }
