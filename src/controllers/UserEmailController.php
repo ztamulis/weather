@@ -38,7 +38,10 @@ class UserEmailController extends Controller
      */
     public function store(Request $request)
     {
-        $isSet = DB::table(
+        $isSet = DB::table('user_emails')->where('email', $request->email)->first();
+        if (isset($isSet))
+            UserEmail::create($request->all());
+
         $city = City::orderBy('created_at', 'DESC')->first();
         $client = new \GuzzleHttp\Client();
         $res = $client->request('GET', 'https://api.openweathermap.org/data/2.5/weather?q=' . $city->city . '&APPID=6f3aa95336edac6e5b6296a6e5f37bf2');
