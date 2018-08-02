@@ -39,7 +39,7 @@ class UserEmailController extends Controller
     public function store(Request $request)
     {
         $isSet = DB::table('user_emails')->where('email', $request->email)->first();
-        if (isset($isSet))
+        if (!isset($isSet))
             UserEmail::create($request->all());
 
         $city = City::orderBy('created_at', 'DESC')->first();
